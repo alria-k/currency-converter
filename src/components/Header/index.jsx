@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { TitleColor, DiscrColor } from "../../utils/variables";
 
 const HeaderBox = styled.div`
-  margin: 50px 0 0 0;
+  margin: 50px 0 41px 0;
   text-align: center;
 `;
 

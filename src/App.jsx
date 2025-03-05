@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import { createGlobalStyle } from "styled-components";
 
 import { Header } from "./components/Header";
+import { Main } from "./components/Main";
 import { Container } from "./ui/Container";
 
 const ResetCss = createGlobalStyle`
@@ -89,6 +91,7 @@ export function App() {
       <ResetCss />
       <Container>
         <Header />
+        <Main />
       </Container>
     </>
   );
