@@ -1,5 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 
+import { Header } from "./components/Header";
+import { Container } from "./ui/Container";
+
 const ResetCss = createGlobalStyle`
   *,
   *::before,
@@ -84,9 +87,9 @@ export function App() {
   return (
     <>
       <ResetCss />
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Container>
+        <Header />
+      </Container>
     </>
   );
 }
