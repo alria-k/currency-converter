@@ -5,6 +5,8 @@ import useToggle from "../../hooks/useToggle";
 
 const DropDownContainer = styled.div`
   position: relative;
+  max-width: 120px;
+  width: 100%;
 `;
 const Btn = styled.button`
   padding: 0;
@@ -19,14 +21,19 @@ const CurrencyFlag = styled.span`
 `;
 const MenuContainer = styled.div`
   position: absolute;
-  top: 60px;
-  left: 10px;
+  top: 45px;
+  left: -10px;
   max-height: 210px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
   scrollbar-width: none;
+  z-index: 1;
+  background: #fff;
+  padding: 10px 20px 0 10px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -49,14 +56,31 @@ const CurrencyOption = styled.li`
 export const DropDown = ({ currencyArr, currentCurrency }) => {
   const [current, setCurrent] = useState(currentCurrency);
   const [isOpen, toggleIsOpen] = useToggle();
+  const dropDownRef = useRef(null);
 
   const handleCurrent = (val) => {
     setCurrent(val);
     toggleIsOpen();
   };
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
+        toggleIsOpen(false);
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen, toggleIsOpen]);
+
   return (
-    <DropDownContainer>
+    <DropDownContainer ref={dropDownRef}>
       <Btn onClick={toggleIsOpen}>
         <OptionContainer>
           <CurrencyOption>
@@ -64,7 +88,7 @@ export const DropDown = ({ currencyArr, currentCurrency }) => {
               style={{
                 backgroundImage: `url(${current[1]})`,
                 backgroundRepeat: "no-repeat",
-                backgroundSize: "70px 70px",
+                backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
             ></CurrencyFlag>
@@ -97,7 +121,7 @@ export const DropDown = ({ currencyArr, currentCurrency }) => {
                   style={{
                     backgroundImage: `url(${flag})`,
                     backgroundRepeat: "no-repeat",
-                    backgroundSize: "50px 50px",
+                    backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}
                 ></CurrencyFlag>
