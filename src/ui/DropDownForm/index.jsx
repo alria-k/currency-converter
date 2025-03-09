@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { DropDown } from "../DropDown";
-import { getFlags } from "../../api/currency";
+import { getFlags, getConversionRate } from "../../api/currency";
 
 const DropDownFormContainer = styled.div`
   display: flex;
@@ -23,10 +23,9 @@ const Input = styled.input`
   width: 100%;
 `;
 
-export const DropDownForm = ({
-  defaultCurrency = ["USD", "https://flagcdn.com/w160/us.png"],
-}) => {
+export const DropDownForm = ({ defaultCurrency = [] }) => {
   const [flags, setFlags] = useState([]);
+  const [conversionRate, setConversionRate] = useState({});
   const [inputVal, setInputVal] = useState("1000.00");
 
   const handleInput = ({ target }) => {
@@ -35,9 +34,8 @@ export const DropDownForm = ({
   };
 
   useEffect(() => {
-    getFlags().then((data) => {
-      setFlags(data);
-    });
+    getFlags().then((data) => setFlags(data));
+    getConversionRate(["USD", "EUR"]).then((data) => setConversionRate(data));
   }, []);
 
   return (

@@ -13,10 +13,23 @@ const CoverterContainer = styled.div`
   box-shadow: 21px 23px 42px -20px rgba(66, 68, 90, 1);
 `;
 
+// const defaultCountries = [
+//   {
+//     currency: "USD",
+//     flag: "https://flagcdn.com/w160/us.png",
+//   },
+//   {
+//     currency: "EUR",
+//     flag: "https://flagcdn.com/w160/eu.png",
+//   },
+// ];
+
 export const Converter = () => {
   return (
     <CoverterContainer>
-      <DropDownForm />
+      <DropDownForm
+        defaultCurrency={["USD", "https://flagcdn.com/w160/us.png"]}
+      />
       <DropDownForm
         defaultCurrency={["EUR", "https://flagcdn.com/w160/eu.png"]}
       />

@@ -15,6 +15,16 @@ async function getCountries() {
   return res.data;
 }
 
+export function getConversionRate(countries) {
+  const mainCountry = countries.shift();
+  const [res] = countries.map(async function (country) {
+    return await axios
+      .get(CURRENCY_DATA_URL + `pair/${mainCountry}/${country}`)
+      .then(({ data }) => data);
+  });
+  return res;
+}
+
 export async function getFlags() {
   try {
     const [val1, val2] = await Promise.all([getCountryCodes(), getCountries()]);
