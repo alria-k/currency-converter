@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import useToggle from "../../hooks/useToggle";
+import { getFlags } from "../../api/currency";
 
 const DropDownContainer = styled.div`
   position: relative;
@@ -23,7 +24,7 @@ const MenuContainer = styled.div`
   position: absolute;
   top: 45px;
   left: -10px;
-  max-height: 210px;
+  max-height: 175px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -53,13 +54,17 @@ const CurrencyOption = styled.li`
   color: #26278d;
 `;
 
-export const DropDown = ({ currencyArr, currentCurrency }) => {
-  const [current, setCurrent] = useState(currentCurrency);
+export const DropDown = ({ currentCountry, settingCurrentCountry }) => {
+  const [flags, setFlags] = useState([]);
   const [isOpen, toggleIsOpen] = useToggle();
   const dropDownRef = useRef(null);
 
-  const handleCurrent = (val) => {
-    setCurrent(val);
+  const handleCurrent = (currency, flag) => {
+    settingCurrentCountry({
+      index: currentCountry.index,
+      currency: currency,
+      flag: flag,
+    });
     toggleIsOpen();
   };
 
@@ -79,6 +84,10 @@ export const DropDown = ({ currencyArr, currentCurrency }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, toggleIsOpen]);
 
+  useEffect(() => {
+    getFlags().then((data) => setFlags(data));
+  }, []);
+
   return (
     <DropDownContainer ref={dropDownRef}>
       <Btn onClick={toggleIsOpen}>
@@ -86,13 +95,13 @@ export const DropDown = ({ currencyArr, currentCurrency }) => {
           <CurrencyOption>
             <CurrencyFlag
               style={{
-                backgroundImage: `url(${current[1]})`,
+                backgroundImage: `url(${currentCountry.flag})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
             ></CurrencyFlag>
-            {current[0]}
+            {currentCountry.currency}
           </CurrencyOption>
           <svg
             width="12"
@@ -111,10 +120,10 @@ export const DropDown = ({ currencyArr, currentCurrency }) => {
       </Btn>
       {isOpen && (
         <MenuContainer>
-          {currencyArr.map(({ code, flag }, index) => (
+          {flags.map(({ code, flag }, index) => (
             <OptionContainer
               key={index}
-              onClick={() => handleCurrent([code, flag])}
+              onClick={() => handleCurrent(code, flag)}
             >
               <CurrencyOption>
                 <CurrencyFlag

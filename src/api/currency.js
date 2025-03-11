@@ -15,11 +15,12 @@ async function getCountries() {
   return res.data;
 }
 
-export function getConversionRate(countries) {
-  const mainCountry = countries.shift();
-  const [res] = countries.map(async function (country) {
+export function getConversionRate(mainCountry, convertedCountries) {
+  const [res] = convertedCountries.map(async function (country) {
     return await axios
-      .get(CURRENCY_DATA_URL + `pair/${mainCountry}/${country}`)
+      .get(
+        CURRENCY_DATA_URL + `pair/${mainCountry.currency}/${country.currency}`
+      )
       .then(({ data }) => data);
   });
   return res;

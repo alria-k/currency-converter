@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { DropDown } from "../DropDown";
-import { getFlags, getConversionRate } from "../../api/currency";
 
 const DropDownFormContainer = styled.div`
   display: flex;
@@ -23,10 +22,9 @@ const Input = styled.input`
   width: 100%;
 `;
 
-export const DropDownForm = ({ defaultCurrency = [] }) => {
-  const [flags, setFlags] = useState([]);
-  const [conversionRate, setConversionRate] = useState({});
-  const [inputVal, setInputVal] = useState("1000.00");
+export const DropDownForm = ({ country = {}, changeCountry }) => {
+  const [inputVal, setInputVal] = useState(100.0);
+  const [clickedCountry, setClickedCountry] = useState(country);
 
   const handleInput = ({ target }) => {
     const numericValue = target.value.replace(/[^0-9.,]/g, "");
@@ -34,13 +32,20 @@ export const DropDownForm = ({ defaultCurrency = [] }) => {
   };
 
   useEffect(() => {
-    getFlags().then((data) => setFlags(data));
-    getConversionRate(["USD", "EUR"]).then((data) => setConversionRate(data));
-  }, []);
+    if (country.index == 99) return changeCountry(clickedCountry);
+    changeCountry((prev) => {
+      let replacedObj = prev;
+      replacedObj[clickedCountry.index] = clickedCountry;
+      return replacedObj;
+    });
+  }, [clickedCountry]);
 
   return (
     <DropDownFormContainer>
-      <DropDown currencyArr={flags} currentCurrency={defaultCurrency} />
+      <DropDown
+        currentCountry={clickedCountry}
+        settingCurrentCountry={setClickedCountry}
+      />
       <div>
         <Input
           type="text"
