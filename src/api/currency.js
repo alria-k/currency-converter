@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CURRENCY_API_KEY = "d1def1d5418e6c4ba04dab87";
+const CURRENCY_API_KEY = "be2ffd93dbceba8e9f84b412";
 const CURRENCY_DATA_URL = `https://v6.exchangerate-api.com/v6/${CURRENCY_API_KEY}/`;
 const COUNTRIES_DATA_URL =
   "https://gist.githubusercontent.com/ibrahimhajjaj/a0e39e7330aebf0feb49912f1bf9062f/raw/d160e7d3b0e11ea3912e97a1b3b25b359746c86a/currencies-with-flags.json";
@@ -15,14 +15,15 @@ async function getCountries() {
   return res.data;
 }
 
-export function getConversionRate(mainCountry, convertedCountries) {
-  const [res] = convertedCountries.map(async function (country) {
-    return await axios
+export async function getConversionRate(mainCountry, convertedCountries) {
+  const promises = convertedCountries.map((country) =>
+    axios
       .get(
         CURRENCY_DATA_URL + `pair/${mainCountry.currency}/${country.currency}`
       )
-      .then(({ data }) => data);
-  });
+      .then(({ data }) => data)
+  );
+  const res = await Promise.all(promises);
   return res;
 }
 

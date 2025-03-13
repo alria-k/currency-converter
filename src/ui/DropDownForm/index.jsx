@@ -22,13 +22,17 @@ const Input = styled.input`
   width: 100%;
 `;
 
-export const DropDownForm = ({ country = {}, changeCountry }) => {
-  const [inputVal, setInputVal] = useState(100.0);
+export const DropDownForm = ({
+  country = {},
+  changeCountry,
+  value,
+  setValue,
+}) => {
   const [clickedCountry, setClickedCountry] = useState(country);
 
   const handleInput = ({ target }) => {
     const numericValue = target.value.replace(/[^0-9.,]/g, "");
-    setInputVal(numericValue);
+    setValue(numericValue);
   };
 
   useEffect(() => {
@@ -50,7 +54,7 @@ export const DropDownForm = ({ country = {}, changeCountry }) => {
         <Input
           type="text"
           inputMode="numeric"
-          value={inputVal}
+          value={value}
           onChange={handleInput}
           autoFocus
         />

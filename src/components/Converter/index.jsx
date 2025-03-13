@@ -27,24 +27,50 @@ let countriesData = [
     currency: "EUR",
     flag: "https://flagcdn.com/w160/eu.png",
   },
+  {
+    index: 1,
+    currency: "KZT",
+    flag: "https://flagcdn.com/w160/kz.png",
+  },
 ];
 
 export const Converter = () => {
-  const [conversionRate, setConversionRate] = useState({});
+  const [inputVal, setInputVal] = useState(100.0);
+  const [conversionRate, setConversionRate] = useState([]);
   const [mainCountry, setMainCountry] = useState(mainCountryData);
   const [countries, setCoutnries] = useState(countriesData);
 
-  useEffect(() => {
-    getConversionRate(mainCountryData, countriesData).then((data) =>
-      setConversionRate(data)
+  async function fetchConversionRate() {
+    let res = await Promise.resolve(
+      getConversionRate(mainCountryData, countriesData)
     );
+    setConversionRate(res);
+  }
+
+  useEffect(() => {
+    fetchConversionRate();
   }, [countries]);
 
   return (
     <CoverterContainer>
-      <DropDownForm country={mainCountry} changeCountry={setMainCountry} />
+      <DropDownForm
+        country={mainCountry}
+        changeCountry={setMainCountry}
+        value={inputVal}
+        setValue={setInputVal}
+      />
       {countries.map((data, index) => (
-        <DropDownForm key={index} country={data} changeCountry={setCoutnries} />
+        <DropDownForm
+          key={index}
+          country={data}
+          changeCountry={setCoutnries}
+          value={
+            conversionRate[index]
+              ? inputVal * conversionRate[index].conversion_rate
+              : 1
+          }
+          setValue={setInputVal}
+        />
       ))}
     </CoverterContainer>
   );
