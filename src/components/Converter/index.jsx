@@ -35,41 +35,59 @@ let countriesData = [
 ];
 
 export const Converter = () => {
-  const [inputVal, setInputVal] = useState(100.0);
+  const [inputVal, setInputVal] = useState(0);
   const [conversionRate, setConversionRate] = useState([]);
+  const [activeInput, setActiveInput] = useState(null);
   const [mainCountry, setMainCountry] = useState(mainCountryData);
   const [countries, setCoutnries] = useState(countriesData);
 
   async function fetchConversionRate() {
-    let res = await Promise.resolve(
-      getConversionRate(mainCountryData, countriesData)
+    const res = await Promise.resolve(
+      getConversionRate(mainCountry, countries)
     );
     setConversionRate(res);
   }
 
+  const converterLogic = (index) => {
+    if (activeInput == null)
+      return (inputVal * conversionRate[index].conversion_rate).toFixed(2);
+    if (activeInput != index) {
+      return (
+        (inputVal / conversionRate[activeInput].conversion_rate) *
+        conversionRate[index].conversion_rate
+      ).toFixed(2);
+    } else {
+      return inputVal;
+    }
+  };
+
   useEffect(() => {
     fetchConversionRate();
-  }, [countries]);
+  }, [countries, mainCountry]);
 
   return (
     <CoverterContainer>
       <DropDownForm
         country={mainCountry}
         changeCountry={setMainCountry}
-        value={inputVal}
+        value={
+          activeInput == null
+            ? inputVal
+            : (inputVal / conversionRate[activeInput].conversion_rate).toFixed(
+                2
+              )
+        }
         setValue={setInputVal}
+        setInput={setActiveInput}
       />
       {countries.map((data, index) => (
         <DropDownForm
           key={index}
           country={data}
           changeCountry={setCoutnries}
-          value={
-            conversionRate[index]
-              ? inputVal * conversionRate[index].conversion_rate
-              : 1
-          }
+          value={conversionRate.length ? converterLogic(index) : inputVal}
           setValue={setInputVal}
+          setInput={setActiveInput}
         />
       ))}
     </CoverterContainer>

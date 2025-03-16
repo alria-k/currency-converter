@@ -27,20 +27,26 @@ export const DropDownForm = ({
   changeCountry,
   value,
   setValue,
+  setInput,
 }) => {
   const [clickedCountry, setClickedCountry] = useState(country);
 
   const handleInput = ({ target }) => {
     const numericValue = target.value.replace(/[^0-9.,]/g, "");
     setValue(numericValue);
+    if (country.index == 99) {
+      setInput(null);
+    } else {
+      setInput(country.index);
+    }
   };
 
   useEffect(() => {
     if (country.index == 99) return changeCountry(clickedCountry);
     changeCountry((prev) => {
-      let replacedObj = prev;
-      replacedObj[clickedCountry.index] = clickedCountry;
-      return replacedObj;
+      return prev.map((item, index) =>
+        index === clickedCountry.index ? clickedCountry : item
+      );
     });
   }, [clickedCountry]);
 
