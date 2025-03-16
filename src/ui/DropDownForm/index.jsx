@@ -42,6 +42,10 @@ export const DropDownForm = ({
   };
 
   useEffect(() => {
+    setClickedCountry(country);
+  }, [country]);
+
+  useEffect(() => {
     if (country.index == 99) return changeCountry(clickedCountry);
     changeCountry((prev) => {
       return prev.map((item, index) =>
