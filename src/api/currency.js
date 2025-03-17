@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CURRENCY_API_KEY = "be2ffd93dbceba8e9f84b412";
+const CURRENCY_API_KEY = "086c7c583b33fa2054130738";
 const CURRENCY_DATA_URL = `https://v6.exchangerate-api.com/v6/${CURRENCY_API_KEY}/`;
 const COUNTRIES_DATA_URL =
   "https://gist.githubusercontent.com/ibrahimhajjaj/a0e39e7330aebf0feb49912f1bf9062f/raw/d160e7d3b0e11ea3912e97a1b3b25b359746c86a/currencies-with-flags.json";
