@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { DropDownForm } from "../../ui/DropDownForm";
-import { getConversionRate } from "../../api/currency";
+import { getConversionRate, getRandomCountry } from "../../api/currency";
 
 const ConveterBox = styled.div`
   max-width: 700px;
@@ -13,9 +13,9 @@ const CoverterContainer = styled.div`
   padding: 20px;
   background: #fff;
   border-radius: 20px;
-  -webkit-box-shadow: 21px 23px 42px -20px rgba(66, 68, 90, 1);
-  -moz-box-shadow: 21px 23px 42px -20px rgba(66, 68, 90, 1);
-  box-shadow: 21px 23px 42px -20px rgba(66, 68, 90, 1);
+  -webkit-box-shadow: 16px 15px 61px -25px rgba(66, 68, 90, 1);
+  -moz-box-shadow: 16px 15px 61px -25px rgba(66, 68, 90, 1);
+  box-shadow: 16px 15px 61px -25px rgba(66, 68, 90, 1);
   margin-bottom: 30px;
 `;
 
@@ -48,14 +48,13 @@ const SwapCurrenciesBtn = styled.button`
   border-radius: 50%;
   background-color: #26278d;
   padding: 12px 15px;
+  border: none;
   &:disabled {
     background-color: #000;
     opacity: 25%;
     cursor: not-allowed;
   }
 `;
-
-const ExchangeRateContainer = styled.div``;
 
 const ExchageRateText = styled.p`
   color: #000;
@@ -64,8 +63,24 @@ const ExchageRateText = styled.p`
   margin-bottom: 10px;
 `;
 
+const AddCountryContainer = styled.div`
+  margin: 0 auto;
+  max-width: 300px;
+  margin-top: 20px;
+`;
+
+const AddCountryBtn = styled.button`
+  width: 100%;
+  border: 3px dashed #10d104;
+  border-radius: 10px;
+  color: #10d104;
+  font-size: 26px;
+  background-color: transparent;
+`;
+
 let mainCountryData = {
   index: 99,
+  country_id: 146,
   currency: "USD",
   flag: "https://flagcdn.com/w160/us.png",
 };
@@ -73,14 +88,10 @@ let mainCountryData = {
 let countriesData = [
   {
     index: 0,
+    country_id: 42,
     currency: "EUR",
     flag: "https://flagcdn.com/w160/eu.png",
   },
-  // {
-  //   index: 1,
-  //   currency: "KZT",
-  //   flag: "https://flagcdn.com/w160/kz.png",
-  // },
 ];
 
 export const Converter = () => {
@@ -89,6 +100,7 @@ export const Converter = () => {
   const [activeInput, setActiveInput] = useState(null);
   const [mainCountry, setMainCountry] = useState(mainCountryData);
   const [countries, setCoutnries] = useState(countriesData);
+  let checkLength = conversionRate.length == countries.length;
 
   async function fetchConversionRate() {
     const res = await Promise.resolve(
@@ -98,6 +110,7 @@ export const Converter = () => {
   }
 
   const converterLogic = (index) => {
+    if (conversionRate.length == 0) return;
     if (activeInput == null)
       return (inputVal * conversionRate[index].conversion_rate).toFixed(2);
     if (activeInput != index) {
@@ -114,6 +127,13 @@ export const Converter = () => {
     if (countries.length > 1) return;
     setCoutnries((prev) => prev.map(() => ({ ...mainCountry, index: 0 })));
     setMainCountry({ ...countries[0], index: 99 });
+  };
+
+  const handleAddingCountry = async () => {
+    if (countries.length == 5) return;
+
+    const res = await getRandomCountry(countries);
+    setCoutnries((prev) => [...prev, res]);
   };
 
   useEffect(() => {
@@ -171,23 +191,31 @@ export const Converter = () => {
               key={index}
               country={data}
               changeCountry={setCoutnries}
-              value={conversionRate.length ? converterLogic(index) : inputVal}
+              value={checkLength ? converterLogic(index) : inputVal}
               setValue={setInputVal}
               setInput={setActiveInput}
             />
           ))}
         </CurrencyConverterContainer>
+        <AddCountryContainer>
+          <AddCountryBtn onClick={handleAddingCountry} title="ADD CURRENCY">
+            +
+          </AddCountryBtn>
+        </AddCountryContainer>
       </CoverterContainer>
-      <ExchangeRateContainer>
+      <div>
         <ConverterTitle> Indicative Exchange Rate</ConverterTitle>
         {countries.map((data, i) => (
           <ExchageRateText key={i}>
-            1 {mainCountry.currency} ={" "}
-            {conversionRate.length &&
-              conversionRate[i].conversion_rate + " " + data.currency}
+            {"1 " +
+              mainCountry.currency +
+              " = " +
+              (checkLength && conversionRate[i].conversion_rate) +
+              " " +
+              data.currency}
           </ExchageRateText>
         ))}
-      </ExchangeRateContainer>
+      </div>
     </ConveterBox>
   );
 };

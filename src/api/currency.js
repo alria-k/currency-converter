@@ -15,6 +15,25 @@ async function getCountries() {
   return res.data;
 }
 
+export async function getRandomCountry(countries) {
+  const { supported_codes } = await Promise.resolve(getCountryCodes());
+  let randomCountryFound = false;
+  while (randomCountryFound != true) {
+    let randomCountryIndex = Math.floor(Math.random() * supported_codes.length);
+    if (!countries.includes((data) => data.country_id == randomCountryIndex)) {
+      randomCountryFound = true;
+      return {
+        index: countries.length,
+        country_id: randomCountryIndex,
+        currency: supported_codes[randomCountryIndex][0],
+        flag: `https://flagcdn.com/w160/${supported_codes[randomCountryIndex][0]
+          .substring(0, supported_codes[randomCountryIndex][0].length - 1)
+          .toLowerCase()}.png`,
+      };
+    }
+  }
+}
+
 export async function getConversionRate(mainCountry, convertedCountries) {
   const promises = convertedCountries.map((country) =>
     axios
