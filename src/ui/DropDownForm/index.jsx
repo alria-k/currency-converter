@@ -57,8 +57,8 @@ export const DropDownForm = ({
   return (
     <DropDownFormContainer>
       <DropDown
-        currentCountry={clickedCountry}
-        settingCurrentCountry={setClickedCountry}
+        clickedCountry={clickedCountry}
+        setClickedCountry={setClickedCountry}
       />
       <div>
         <Input

@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { DropDownForm } from "../../ui/DropDownForm";
-import { getConversionRate, getRandomCountry } from "../../api/currency";
+import { AddCountryBtn } from "../../ui/AddCountryBtn";
+import { getConversionRate } from "../../api/currency";
 
 const ConveterBox = styled.div`
   max-width: 700px;
@@ -46,14 +47,11 @@ const CurrencyLine = styled.span`
 
 const SwapCurrenciesBtn = styled.button`
   border-radius: 50%;
-  background-color: #26278d;
+  background-color: ${({ disabled }) => (disabled ? "#000" : "#26278d")};
   padding: 12px 15px;
   border: none;
-  &:disabled {
-    background-color: #000;
-    opacity: 25%;
-    cursor: not-allowed;
-  }
+  opacity: ${({ disabled }) => (disabled ? "25%" : "100%")};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
 `;
 
 const ExchageRateText = styled.p`
@@ -61,21 +59,6 @@ const ExchageRateText = styled.p`
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 10px;
-`;
-
-const AddCountryContainer = styled.div`
-  margin: 0 auto;
-  max-width: 300px;
-  margin-top: 20px;
-`;
-
-const AddCountryBtn = styled.button`
-  width: 100%;
-  border: 3px dashed #10d104;
-  border-radius: 10px;
-  color: #10d104;
-  font-size: 26px;
-  background-color: transparent;
 `;
 
 let mainCountryData = {
@@ -129,13 +112,6 @@ export const Converter = () => {
     setMainCountry({ ...countries[0], index: 99 });
   };
 
-  const handleAddingCountry = async () => {
-    if (countries.length == 5) return;
-
-    const res = await getRandomCountry(countries);
-    setCoutnries((prev) => [...prev, res]);
-  };
-
   useEffect(() => {
     fetchConversionRate();
   }, [countries, mainCountry]);
@@ -162,7 +138,7 @@ export const Converter = () => {
         <ChangeCurrencyLine>
           <CurrencyLine />
           <SwapCurrenciesBtn
-            disabled={countriesData.length > 1 ? true : false}
+            disabled={countries.length > 1}
             onClick={handleSwap}
           >
             <svg
@@ -197,11 +173,7 @@ export const Converter = () => {
             />
           ))}
         </CurrencyConverterContainer>
-        <AddCountryContainer>
-          <AddCountryBtn onClick={handleAddingCountry} title="ADD CURRENCY">
-            +
-          </AddCountryBtn>
-        </AddCountryContainer>
+        <AddCountryBtn countries={countries} setCoutnries={setCoutnries} />
       </CoverterContainer>
       <div>
         <ConverterTitle> Indicative Exchange Rate</ConverterTitle>
@@ -210,7 +182,7 @@ export const Converter = () => {
             {"1 " +
               mainCountry.currency +
               " = " +
-              (checkLength && conversionRate[i].conversion_rate) +
+              (checkLength ? conversionRate[i].conversion_rate : 0) +
               " " +
               data.currency}
           </ExchageRateText>

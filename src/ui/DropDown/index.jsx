@@ -54,16 +54,22 @@ const CurrencyOption = styled.li`
   color: #26278d;
 `;
 
-export const DropDown = ({ currentCountry, settingCurrentCountry }) => {
+export const DropDown = ({ clickedCountry, setClickedCountry }) => {
   const [flags, setFlags] = useState([]);
   const [isOpen, toggleIsOpen] = useToggle();
   const dropDownRef = useRef(null);
 
-  const handleCurrent = (currency, flag) => {
-    settingCurrentCountry({
-      index: currentCountry.index,
-      currency: currency,
-      flag: flag,
+  async function fetchFlags() {
+    const res = await Promise.resolve(getFlags());
+    setFlags(res);
+  }
+
+  const handleCurrent = (data) => {
+    setClickedCountry({
+      index: clickedCountry.index,
+      country_id: data.country_id,
+      currency: data.code,
+      flag: data.flag,
     });
     toggleIsOpen();
   };
@@ -85,7 +91,7 @@ export const DropDown = ({ currentCountry, settingCurrentCountry }) => {
   }, [isOpen, toggleIsOpen]);
 
   useEffect(() => {
-    getFlags().then((data) => setFlags(data));
+    fetchFlags();
   }, []);
 
   return (
@@ -95,13 +101,13 @@ export const DropDown = ({ currentCountry, settingCurrentCountry }) => {
           <CurrencyOption>
             <CurrencyFlag
               style={{
-                backgroundImage: `url(${currentCountry.flag})`,
+                backgroundImage: `url(${clickedCountry.flag})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
             ></CurrencyFlag>
-            {currentCountry.currency}
+            {clickedCountry.currency}
           </CurrencyOption>
           <svg
             width="12"
@@ -120,21 +126,18 @@ export const DropDown = ({ currentCountry, settingCurrentCountry }) => {
       </Btn>
       {isOpen && (
         <MenuContainer>
-          {flags.map(({ code, flag }, index) => (
-            <OptionContainer
-              key={index}
-              onClick={() => handleCurrent(code, flag)}
-            >
+          {flags.map((data, index) => (
+            <OptionContainer key={index} onClick={() => handleCurrent(data)}>
               <CurrencyOption>
                 <CurrencyFlag
                   style={{
-                    backgroundImage: `url(${flag})`,
+                    backgroundImage: `url(${data.flag})`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}
                 ></CurrencyFlag>
-                {code}
+                {data.code}
               </CurrencyOption>
             </OptionContainer>
           ))}
