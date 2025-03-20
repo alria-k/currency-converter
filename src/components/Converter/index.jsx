@@ -86,9 +86,7 @@ export const Converter = () => {
   let checkLength = conversionRate.length == countries.length;
 
   async function fetchConversionRate() {
-    const res = await Promise.resolve(
-      getConversionRate(mainCountry, countries)
-    );
+    const res = await getConversionRate(mainCountry, countries);
     setConversionRate(res);
   }
 

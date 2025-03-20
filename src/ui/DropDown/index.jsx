@@ -60,7 +60,7 @@ export const DropDown = ({ clickedCountry, setClickedCountry }) => {
   const dropDownRef = useRef(null);
 
   async function fetchFlags() {
-    const res = await Promise.resolve(getFlags());
+    const res = await getFlags();
     setFlags(res);
   }
 
