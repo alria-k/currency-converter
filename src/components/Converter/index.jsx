@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { DropDownForm } from "../../ui/DropDownForm";
 import { AddCountryBtn } from "../../ui/AddCountryBtn";
 import { getConversionRate } from "../../api/currency";
+import { RemoveCountryBtn } from "../../ui/RemoveCountryBtn";
 
 const ConveterBox = styled.div`
   max-width: 700px;
@@ -61,6 +62,12 @@ const ExchageRateText = styled.p`
   margin-bottom: 10px;
 `;
 
+const DropDownFormContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 let mainCountryData = {
   index: 99,
   country_id: 146,
@@ -82,8 +89,7 @@ export const Converter = () => {
   const [conversionRate, setConversionRate] = useState([]);
   const [activeInput, setActiveInput] = useState(null);
   const [mainCountry, setMainCountry] = useState(mainCountryData);
-  const [countries, setCoutnries] = useState(countriesData);
-  let checkLength = conversionRate.length == countries.length;
+  const [countries, setCountries] = useState(countriesData);
 
   async function fetchConversionRate() {
     const res = await getConversionRate(mainCountry, countries);
@@ -106,13 +112,15 @@ export const Converter = () => {
 
   const handleSwap = () => {
     if (countries.length > 1) return;
-    setCoutnries((prev) => prev.map(() => ({ ...mainCountry, index: 0 })));
+    setCountries((prev) => prev.map(() => ({ ...mainCountry, index: 0 })));
     setMainCountry({ ...countries[0], index: 99 });
   };
 
   useEffect(() => {
     fetchConversionRate();
   }, [countries, mainCountry]);
+
+  console.log(countries);
 
   return (
     <ConveterBox>
@@ -161,17 +169,25 @@ export const Converter = () => {
         <CurrencyConverterContainer>
           <ConverterTitle>Converted Amount</ConverterTitle>
           {countries.map((data, index) => (
-            <DropDownForm
-              key={index}
-              country={data}
-              changeCountry={setCoutnries}
-              value={checkLength ? converterLogic(index) : inputVal}
-              setValue={setInputVal}
-              setInput={setActiveInput}
-            />
+            <DropDownFormContainer key={index}>
+              <DropDownForm
+                country={data}
+                changeCountry={setCountries}
+                value={
+                  conversionRate[index] != undefined
+                    ? converterLogic(index)
+                    : inputVal
+                }
+                setValue={setInputVal}
+                setInput={setActiveInput}
+              />
+              {countries.length > 1 && (
+                <RemoveCountryBtn country={data} setCountries={setCountries} />
+              )}
+            </DropDownFormContainer>
           ))}
         </CurrencyConverterContainer>
-        <AddCountryBtn countries={countries} setCoutnries={setCoutnries} />
+        <AddCountryBtn countries={countries} setCountries={setCountries} />
       </CoverterContainer>
       <div>
         <ConverterTitle> Indicative Exchange Rate</ConverterTitle>
@@ -180,7 +196,9 @@ export const Converter = () => {
             {"1 " +
               mainCountry.currency +
               " = " +
-              (checkLength ? conversionRate[i].conversion_rate : 0) +
+              (conversionRate[i] != undefined
+                ? conversionRate[i].conversion_rate
+                : 0) +
               " " +
               data.currency}
           </ExchageRateText>

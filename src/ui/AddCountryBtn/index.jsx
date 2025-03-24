@@ -10,24 +10,29 @@ const AddCountryContainer = styled.div`
 
 const AddBtn = styled.button`
   width: 100%;
-  border: 3px dashed #10d104;
+  border: 3px dashed;
   border-radius: 10px;
-  color: #10d104;
+  border-color: ${({ $length }) => ($length == 5 ? "#6b7c6a" : "#10d104")};
+  color: ${({ $length }) => ($length == 5 ? "#6b7c6a" : "#10d104")};
+  cursor: ${({ $length }) => ($length == 5 ? "not-allowed" : "pointer")};
   font-size: 26px;
   background-color: transparent;
 `;
 
-export const AddCountryBtn = ({ countries, setCoutnries }) => {
+export const AddCountryBtn = ({ countries, setCountries }) => {
   const handleAddingCountry = async () => {
     if (countries.length == 5) return;
-
     const res = await getRandomCountry(countries);
-    setCoutnries((prev) => [...prev, res]);
+    setCountries((prev) => [...prev, res]);
   };
 
   return (
     <AddCountryContainer>
-      <AddBtn onClick={handleAddingCountry} title="ADD CURRENCY">
+      <AddBtn
+        onClick={handleAddingCountry}
+        title="ADD CURRENCY"
+        $length={countries.length}
+      >
         +
       </AddBtn>
     </AddCountryContainer>

@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { DropDown } from "../DropDown";
+import { swapItemsInArray } from "../../utils/helpers";
 
 const DropDownFormContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 16px;
 `;
 const Input = styled.input`
@@ -20,6 +21,7 @@ const Input = styled.input`
   font-size: 20px;
   font-weight: 700;
   width: 100%;
+  max-width: 230px;
 `;
 
 export const DropDownForm = ({
@@ -48,9 +50,18 @@ export const DropDownForm = ({
   useEffect(() => {
     if (country.index == 99) return changeCountry(clickedCountry);
     changeCountry((prev) => {
-      return prev.map((item, index) =>
-        index === clickedCountry.index ? clickedCountry : item
+      const copyArr = [...prev];
+      const foundItem = copyArr.find(
+        (item) => item.country_id == clickedCountry.country_id
       );
+      if (foundItem) {
+        swapItemsInArray(copyArr, foundItem.index, clickedCountry.index);
+        return copyArr;
+      } else {
+        return copyArr.map((item, index) =>
+          index === clickedCountry.index ? clickedCountry : item
+        );
+      }
     });
   }, [clickedCountry]);
 
