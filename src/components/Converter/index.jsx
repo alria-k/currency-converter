@@ -110,17 +110,15 @@ export const Converter = () => {
     }
   };
 
-  const handleSwap = () => {
+  const handleSwap = (index = 0) => {
     if (countries.length > 1) return;
-    setCountries((prev) => prev.map(() => ({ ...mainCountry, index: 0 })));
+    setCountries((prev) => prev.map(() => ({ ...mainCountry, index: index })));
     setMainCountry({ ...countries[0], index: 99 });
   };
 
   useEffect(() => {
     fetchConversionRate();
   }, [countries, mainCountry]);
-
-  console.log(countries);
 
   return (
     <ConveterBox>
@@ -129,7 +127,7 @@ export const Converter = () => {
           <ConverterTitle>Amount</ConverterTitle>
           <DropDownForm
             country={mainCountry}
-            changeCountry={setMainCountry}
+            setChangeCountry={setMainCountry}
             value={
               activeInput == null
                 ? inputVal
@@ -172,7 +170,7 @@ export const Converter = () => {
             <DropDownFormContainer key={index}>
               <DropDownForm
                 country={data}
-                changeCountry={setCountries}
+                setChangeCountry={setCountries}
                 value={
                   conversionRate[index] != undefined
                     ? converterLogic(index)

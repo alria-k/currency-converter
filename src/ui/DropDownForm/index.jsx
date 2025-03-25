@@ -26,7 +26,7 @@ const Input = styled.input`
 
 export const DropDownForm = ({
   country = {},
-  changeCountry,
+  setChangeCountry,
   value,
   setValue,
   setInput,
@@ -44,24 +44,12 @@ export const DropDownForm = ({
   };
 
   useEffect(() => {
-    setClickedCountry(country);
-  }, [country]);
-
-  useEffect(() => {
-    if (country.index == 99) return changeCountry(clickedCountry);
-    changeCountry((prev) => {
+    if (country.index == 99) return setChangeCountry(clickedCountry);
+    setChangeCountry((prev) => {
       const copyArr = [...prev];
-      const foundItem = copyArr.find(
-        (item) => item.country_id == clickedCountry.country_id
+      return copyArr.map((item, index) =>
+        index === clickedCountry.index ? clickedCountry : item
       );
-      if (foundItem) {
-        swapItemsInArray(copyArr, foundItem.index, clickedCountry.index);
-        return copyArr;
-      } else {
-        return copyArr.map((item, index) =>
-          index === clickedCountry.index ? clickedCountry : item
-        );
-      }
     });
   }, [clickedCountry]);
 

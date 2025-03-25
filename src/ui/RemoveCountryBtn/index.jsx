@@ -16,9 +16,8 @@ export const RemoveCountryBtn = ({ country, setCountries }) => {
       return prev
         .map((data) => {
           if (country.index === data.index) return null;
-          if (country.index < data.index) {
+          if (country.index < data.index)
             return { ...data, index: data.index - 1 };
-          }
           return data;
         })
         .filter((data) => data !== null);
