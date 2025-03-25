@@ -44,12 +44,29 @@ export const DropDownForm = ({
   };
 
   useEffect(() => {
+    setClickedCountry(country);
+  }, [country]);
+
+  useEffect(() => {
     if (country.index == 99) return setChangeCountry(clickedCountry);
     setChangeCountry((prev) => {
       const copyArr = [...prev];
-      return copyArr.map((item, index) =>
-        index === clickedCountry.index ? clickedCountry : item
-      );
+      let dupedItemIndex = null;
+      const checkForDuplicates = copyArr.map((data, i) => {
+        if (
+          data.index != clickedCountry.index &&
+          data.country_id == clickedCountry.country_id
+        ) {
+          dupedItemIndex = data.index;
+          return data;
+        }
+        return i === clickedCountry.index ? clickedCountry : data;
+      });
+      if (dupedItemIndex != null) {
+        return swapItemsInArray(copyArr, dupedItemIndex, clickedCountry.index);
+      } else {
+        return checkForDuplicates;
+      }
     });
   }, [clickedCountry]);
 

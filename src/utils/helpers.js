@@ -8,5 +8,10 @@ export function swapItemsInArray(arr, index1, index2) {
   )
     return;
 
-  [arr[index1], arr[index2]] = [arr[index2], arr[index1]];
+  const copyArr = [...arr];
+
+  copyArr[index1] = { ...arr[index2], index: arr[index1].index };
+  copyArr[index2] = { ...arr[index1], index: arr[index2].index };
+
+  return copyArr;
 }
