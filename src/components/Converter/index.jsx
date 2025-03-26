@@ -91,13 +91,13 @@ export const Converter = () => {
   const [mainCountry, setMainCountry] = useState(mainCountryData);
   const [countries, setCountries] = useState(countriesData);
 
-  async function fetchConversionRate() {
+  const fetchConversionRate = async () => {
     const res = await getConversionRate(mainCountry, countries);
     setConversionRate(res);
-  }
+  };
 
   const converterLogic = (index) => {
-    if (conversionRate.length == 0) return;
+    if (conversionRate[index] == undefined) return undefined;
     if (activeInput == null)
       return (inputVal * conversionRate[index].conversion_rate).toFixed(2);
     if (activeInput != index) {
@@ -143,7 +143,7 @@ export const Converter = () => {
           <CurrencyLine />
           <SwapCurrenciesBtn
             disabled={countries.length > 1}
-            onClick={handleSwap}
+            onClick={() => handleSwap()}
           >
             <svg
               width="16"
@@ -171,11 +171,7 @@ export const Converter = () => {
               <DropDownForm
                 country={data}
                 setChangeCountry={setCountries}
-                value={
-                  conversionRate[index] != undefined
-                    ? converterLogic(index)
-                    : inputVal
-                }
+                value={converterLogic(index) || inputVal}
                 setValue={setInputVal}
                 setInput={setActiveInput}
               />

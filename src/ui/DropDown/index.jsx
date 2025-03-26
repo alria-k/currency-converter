@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 
 import useToggle from "../../hooks/useToggle";
@@ -59,10 +59,10 @@ export const DropDown = ({ clickedCountry, setClickedCountry }) => {
   const [isOpen, toggleIsOpen] = useToggle();
   const dropDownRef = useRef(null);
 
-  async function fetchFlags() {
+  const fetchFlags = useCallback(async () => {
     const res = await getFlags();
     setFlags(res);
-  }
+  }, []);
 
   const handleCurrent = (data) => {
     setClickedCountry({
@@ -92,7 +92,7 @@ export const DropDown = ({ clickedCountry, setClickedCountry }) => {
 
   useEffect(() => {
     fetchFlags();
-  }, []);
+  }, [fetchFlags]);
 
   return (
     <DropDownContainer ref={dropDownRef}>

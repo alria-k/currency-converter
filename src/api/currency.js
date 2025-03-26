@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CURRENCY_API_KEY = "70e944e0df85f535ea442a95";
+const CURRENCY_API_KEY = import.meta.env.VITE_API_KEY;
 const CURRENCY_DATA_URL = `https://v6.exchangerate-api.com/v6/${CURRENCY_API_KEY}/`;
 
 async function getCountryCodes() {
