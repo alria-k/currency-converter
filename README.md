@@ -95,7 +95,7 @@ This is an example of how to list things you need to use the software and how to
 1. Get a free API Key at [https://www.exchangerate-api.com/](https://www.exchangerate-api.com/)
 2. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/alria-k/currency-converter
    ```
 3. Install NPM packages
    ```sh
@@ -132,7 +132,8 @@ This is an example of how to list things you need to use the software and how to
 <br>  
 ◉ You will not be able to select the same countries  
 <br>  
-◉ Display indicative exchange rate 
+◉ Display indicative exchange rate
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
