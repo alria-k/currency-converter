@@ -25,10 +25,6 @@
   <h3 align="center">Currency converter</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
     <br />
     <a href="https://currency-converter-pink-ten.vercel.app/">View Demo</a>
     &middot;
@@ -122,15 +118,21 @@ This is an example of how to list things you need to use the software and how to
 
 ## Logic and features
 
-◉ Currency conversion
-◉ Drop-down list with 161 countries to choose from
-◉ Swap if only two countries are converted
-◉ Entering an amount in any field converts the amount based on the main conversion country.
-◉ Adding up to 5 countries for simultaneous conversion (when adding, the country is selected randomly)
-◉ Deletion of any conversion field
-◉ You will not be able to select the same countries
-◉ Display indicative exchange rate
-
+◉ Currency conversion  
+<br>  
+◉ Drop-down list with 161 countries to choose from  
+<br>  
+◉ Swap if only two countries are converted  
+<br>  
+◉ Entering an amount in any field converts the amount based on the main conversion country.  
+<br>  
+◉ Adding up to 5 countries for simultaneous conversion (when adding, the country is selected randomly)  
+<br>  
+◉ Deletion of any conversion field  
+<br>  
+◉ You will not be able to select the same countries  
+<br>  
+◉ Display indicative exchange rate 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
@@ -154,7 +156,7 @@ Don't forget to give the project a star! Thanks again!
 
 ## Contact
 
-Artur - [LinkedIn](https://www.linkedin.com/in/arthur-kirovich) - email@example.com
+Artur - [LinkedIn](https://www.linkedin.com/in/arthur-kirovich) - artur.kirovich@gmail.com
 
 Project Link: [https://github.com/alria-k/currency-converter](https://github.com/alria-k/currency-converter)
 
