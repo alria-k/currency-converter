@@ -176,7 +176,11 @@ export const Converter = () => {
                 setInput={setActiveInput}
               />
               {countries.length > 1 && (
-                <RemoveCountryBtn country={data} setCountries={setCountries} />
+                <RemoveCountryBtn
+                  country={data}
+                  setCountries={setCountries}
+                  setInput={setActiveInput}
+                />
               )}
             </DropDownFormContainer>
           ))}

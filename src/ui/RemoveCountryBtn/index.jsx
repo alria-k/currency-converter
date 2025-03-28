@@ -10,8 +10,9 @@ const RemoveButton = styled.button`
   background-color: #ff0000;
 `;
 
-export const RemoveCountryBtn = ({ country, setCountries }) => {
+export const RemoveCountryBtn = ({ country, setCountries, setInput }) => {
   const handleRemoveBtn = () => {
+    setInput(null);
     setCountries((prev) => {
       return prev
         .map((data) => {
